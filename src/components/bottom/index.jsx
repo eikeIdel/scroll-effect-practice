@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSprings, animated } from "react-spring";
+// import { useSprings, animated } from "react-spring";
 import image11 from "../../assets/image-1-1.jpg";
 import image12 from "../../assets/image-1-2.jpg";
 import image13 from "../../assets/image-1-3.jpg";
@@ -30,13 +30,13 @@ const styles = {
     // verticalAlign: "bottom",
   },
   scrollDiv: {
-    overflow: "auto",
-    // scrollBehavior: "smooth",
+    overflow: "hidden",
+    scrollBehavior: "smooth",
   },
   container: {
     width: "50%",
     height: "100%",
-    overflow: "auto",
+
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -60,41 +60,42 @@ function BottonComponent({ props: { group, setGroup } }) {
   const scrollToFour = useRef();
 
   //read out with useScrollDirection if the user scrolls up or down. then declare which page/element/slide is visibile
-  useEffect(() => {
-    if (scrollDirection === "UP" && visibleSlide !== 0)
-      setVisibleSlide(visibleSlide - 1);
-    else if (scrollDirection === "DOWN" && visibleSlide !== images.length - 1)
-      setVisibleSlide(visibleSlide + 1);
-    // else if (scrollDirection ===)
-    console.log({ scrollDirection, visibleSlide });
-  }, [scrollDirection]);
+  // useEffect(() => {
+  //   if (scrollDirection === "UP" && visibleSlide !== 0)
+  //     setVisibleSlide(visibleSlide - 1);
+  //   else if (scrollDirection === "DOWN" && visibleSlide !== images.length - 1)
+  //     setVisibleSlide(visibleSlide + 1);
+  //   // else if (scrollDirection ===)
+  //   console.log({ scrollDirection, visibleSlide });
+  // }, [scrollDirection]);
 
   //after updating the visibleSlide turn the number value (element index) to the ref name and scroll to thge loaction with scrollIntoView
-  useEffect(() => {
-    switch (visibleSlide) {
-      case 0:
-        scrollToZero.current.scrollIntoView();
-        break;
-      case 1:
-        scrollToOne.current.scrollIntoView();
-        break;
-      case 2:
-        scrollToTwo.current.scrollIntoView();
-        break;
-      case 3:
-        scrollToThree.current.scrollIntoView();
-        break;
-      case 4:
-        scrollToFour.current.scrollIntoView();
-        break;
-      default:
-        break;
-    }
-  }, [visibleSlide]);
+  // useEffect(() => {
+  //   switch (visibleSlide) {
+  //     case 0:
+  //       scrollToZero.current.scrollIntoView();
+  //       break;
+  //     case 1:
+  //       scrollToOne.current.scrollIntoView();
+  //       break;
+  //     case 2:
+  //       scrollToTwo.current.scrollIntoView();
+  //       break;
+  //     case 3:
+  //       scrollToThree.current.scrollIntoView();
+  //       break;
+  //     case 4:
+  //       scrollToFour.current.scrollIntoView();
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }, [visibleSlide]);
 
   return (
     <div style={styles.BottomComponent}>
-      <div style={styles.buttonContainer}>
+      {/* jump to  element on button click */}
+      {/* <div style={styles.buttonContainer}>
         <button onClick={() => scrollToZero.current.scrollIntoView()}>
           Zero
         </button>
@@ -110,11 +111,14 @@ function BottonComponent({ props: { group, setGroup } }) {
         <button onClick={() => scrollToFour.current.scrollIntoView()}>
           Four
         </button>
-      </div>
+      </div> */}
       <div
         style={styles.scrollDiv}
         ref={scrollTargetRef}
-        // onWheel={(event) => event.preventDefault()}
+        onWheel={(event) => {
+          console.log(event.deltaY);
+          event.preventDefault();
+        }}
       >
         <Img0 childRef={scrollToZero} />
         <Img1 childRef={scrollToOne} />
