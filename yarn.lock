@@ -7308,6 +7308,11 @@ react-spring@^9.4.5:
     "@react-spring/web" "~9.4.5"
     "@react-spring/zdog" "~9.4.5"
 
+react-timestamp@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/react-timestamp/-/react-timestamp-5.3.0.tgz#70b1dcb87443b3a3b4e26c761ed179a9ce017363"
+  integrity sha512-nooYc2u7IOcbtKRh4WR9a4vNOiO/799NhKl8ZwIoHW3MoJKzC0xMC037dKBL6MwISAw9QcUG3iF/oqMMGDpAgA==
+
 react-use-scroll-direction@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/react-use-scroll-direction/-/react-use-scroll-direction-0.1.0.tgz#71b3bb1fae76e16dd8e1f6c9ee7a64e157584d54"
