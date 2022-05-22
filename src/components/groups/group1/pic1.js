@@ -12,10 +12,11 @@ const styles = {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    margin: "2rem",
   },
   img: {
     maxWidth: "90%",
-    maxHeight: "90%",
+    maxHeight: "80%",
   },
 };
 
