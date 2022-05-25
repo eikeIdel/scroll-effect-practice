@@ -6,59 +6,57 @@ import image15 from "../../../assets/image-1-5.jpg";
 
 const styles = {
   container: {
-    height: "100%",
-    width: "100%",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    margin: "2rem",
+    height: "100%",
   },
   img: {
     maxWidth: "90%",
-    maxHeight: "80%",
+    maxHeight: "90%",
   },
 };
 
-export const Img0 = ({ childRef }) => {
+export const Img0 = () => {
   return (
-    <div style={styles.container} ref={childRef}>
+    <div style={styles.container}>
       <p>Zero</p>
       <img style={styles.img} src={image11} alt="img0" />
     </div>
   );
 };
 
-export const Img1 = ({ childRef }) => {
+export const Img1 = () => {
   return (
-    <div style={styles.container} ref={childRef}>
+    <div style={styles.container}>
       <p>One</p>
       <img style={styles.img} src={image12} alt="img1" />
     </div>
   );
 };
 
-export const Img2 = ({ childRef }) => {
+export const Img2 = () => {
   return (
-    <div style={styles.container} ref={childRef}>
+    <div style={styles.container}>
       <p>Two</p>
       <img style={styles.img} src={image13} alt="img2" />
     </div>
   );
 };
 
-export const Img3 = ({ childRef }) => {
+export const Img3 = () => {
   return (
-    <div style={styles.container} ref={childRef}>
+    <div style={styles.container}>
       <p>Three</p>
       <img style={styles.img} src={image14} alt="img3" />
     </div>
   );
 };
 
-export const Img4 = ({ childRef }) => {
+export const Img4 = () => {
   return (
-    <div style={styles.container} ref={childRef}>
+    <div style={styles.container}>
       <p>Four</p>
       <img style={styles.img} src={image15} alt="img4" />
     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSprings, animated } from "react-spring";
+import { useTransition, animated, useSpringRef } from "react-spring";
 import image11 from "../../assets/image-1-1.jpg";
 import image12 from "../../assets/image-1-2.jpg";
 import image13 from "../../assets/image-1-3.jpg";
@@ -8,111 +8,91 @@ import image15 from "../../assets/image-1-5.jpg";
 
 import { Img1, Img2, Img3, Img4, Img0 } from "../groups/group1/pic1";
 
-const styles = {
-  BottomComponent: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-
-    width: "60%",
-    height: "50vh",
-
-    backgroundColor: "#E7F3F7",
-    boxShadow:
-      "4px 4px 20px rgba(0, 0, 0, 0.1), inset 4px 4px 20px rgba(0, 0, 0, 0.1)",
-    borderRadius: "20px",
-  },
-  img: {
-    maxWidth: "90%",
-    maxHeight: "90%",
-  },
-  scrollDiv: {
-    overflow: "hidden",
-    scrollBehavior: "smooth",
-  },
-  container: {
-    width: "50%",
-    height: "100%",
-    overflow: "auto",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonContainer: {
-    display: "flex",
-  },
-};
+//each component is one slide. all of them are collected in on arr, so...
+const arrOfComponets = [<Img0 />, <Img1 />, <Img2 />, <Img3 />, <Img4 />];
+//...we can map through them with the animated container created with useTransistion
+const slides = arrOfComponets.map((component) => {
+  return ({ style }) => <animated.div style={style}>{component}</animated.div>;
+});
 
 function BottonComponent({ props: { group, setGroup, deltaY, setDeltaY } }) {
   const [visibleSlide, setVisibleSlide] = useState(0);
-
-  //reference to the element to where the view jumps after event
-  const scrollToZero = useRef();
-  const scrollToOne = useRef();
-  const scrollToTwo = useRef();
-  const scrollToThree = useRef();
-  const scrollToFour = useRef();
-
-  //read out with onWheel if the user scrolls up or down. then declare which page/element/slide is visibile
+  const [scrollDown, setScrollDwon] = useState(true);
+  const transRef = useSpringRef();
+  //inline styling
+  const styles = {
+    BottomComponent: {
+      display: "flex",
+      flexDirection: scrollDown ? "column" : "column-reverse",
+      justifyContent: "center",
+      alignItems: "center",
+      overflow: "auto",
+      width: "60%",
+      height: "50vh",
+      willChange: "transform, opacity",
+      backgroundColor: "#E7F3F7",
+      boxShadow:
+        "4px 4px 20px rgba(0, 0, 0, 0.1), inset 4px 4px 20px rgba(0, 0, 0, 0.1)",
+      borderRadius: "20px",
+    },
+    animationContainer: {
+      // position: "absolute",
+      height: "90%",
+    },
+  };
+  //read out with onWheel=>deltaY (from App.js) if the user scrolls up or down. then declare which page/element/slide is visibile
   useEffect(() => {
-    if (deltaY < 0 && visibleSlide !== 0) setVisibleSlide(visibleSlide - 1);
-    else if (deltaY > 0 && visibleSlide !== 4)
+    if (deltaY < 0 && visibleSlide !== 0) {
+      setScrollDwon(true);
+      setVisibleSlide(visibleSlide - 1);
+    } else if (deltaY > 0 && visibleSlide !== 4) {
+      setScrollDwon(false);
       setVisibleSlide(visibleSlide + 1);
-    else if (deltaY === 0) return;
+    } else if (deltaY === 0) return;
     setDeltaY(0);
-    console.log({ deltaY, visibleSlide });
   }, [deltaY]);
 
-  //after updating the visibleSlide turn the number value (=== element index) to the ref name and scroll to the loaction with scrollIntoView
   useEffect(() => {
-    switch (visibleSlide) {
-      case 0:
-        scrollToZero.current.scrollIntoView();
-        break;
-      case 1:
-        scrollToOne.current.scrollIntoView();
-        break;
-      case 2:
-        scrollToTwo.current.scrollIntoView();
-        break;
-      case 3:
-        scrollToThree.current.scrollIntoView();
-        break;
-      case 4:
-        scrollToFour.current.scrollIntoView();
-        break;
-      default:
-        break;
-    }
+    console.log({ deltaY, visibleSlide });
+    transRef.start();
   }, [visibleSlide]);
+
+  //describe the animation
+  const transitions = useTransition(visibleSlide, {
+    config: { duration: 400 },
+    key: visibleSlide,
+    ref: transRef,
+    // initial: {
+    //   height: "100%",
+    // },
+    //from where the new component starts
+    from: {
+      opacity: "0",
+      transform: `translateY(-100%)`,
+      height: "0%",
+    },
+    //where the animation stops for the new Component and starts for the previous Component
+    enter: {
+      opacity: "1",
+      transform: `translateY(0)`,
+      height: "100%",
+    },
+    //where the animation stops for the previous Component
+    leave: {
+      opacity: "0",
+      transform: `translateY(100%)`,
+      height: "0%",
+    },
+  });
 
   return (
     <div style={styles.BottomComponent}>
-      <div style={styles.buttonContainer}>
-        <button onClick={() => scrollToZero.current.scrollIntoView()}>
-          Top
-        </button>
-        <button onClick={() => scrollToOne.current.scrollIntoView()}>
-          One
-        </button>
-        <button onClick={() => scrollToTwo.current.scrollIntoView()}>
-          Two
-        </button>
-        <button onClick={() => scrollToThree.current.scrollIntoView()}>
-          Three
-        </button>
-        <button onClick={() => scrollToFour.current.scrollIntoView()}>
-          Bottom
-        </button>
-      </div>
-      <div style={styles.scrollDiv}>
-        <Img0 childRef={scrollToZero} />
-        <Img1 childRef={scrollToOne} />
-        <Img2 childRef={scrollToTwo} />
-        <Img3 childRef={scrollToThree} />
-        <Img4 childRef={scrollToFour} />
-      </div>
+      {/* render als components wrapped with the animated.div (useTransition)
+        style si the parameter for the animations and i is the iterator */}
+      {transitions((style, i) => {
+        const Slide = slides[i];
+        return <Slide style={style} />;
+      })}
     </div>
   );
 }
