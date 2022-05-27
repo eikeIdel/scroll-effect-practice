@@ -1,11 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSprings, animated } from "react-spring";
-import image11 from "../../assets/image-1-1.jpg";
-import image12 from "../../assets/image-1-2.jpg";
-import image13 from "../../assets/image-1-3.jpg";
-import image14 from "../../assets/image-1-4.jpg";
-import image15 from "../../assets/image-1-5.jpg";
-
 import { Img1, Img2, Img3, Img4, Img0 } from "../groups/group1/pic1";
 
 const styles = {
@@ -28,7 +21,8 @@ const styles = {
     maxHeight: "90%",
   },
   scrollDiv: {
-    overflow: "hidden",
+    overflowY: "hidden ",
+    overflowX: "hidden",
     scrollBehavior: "smooth",
   },
   container: {
@@ -45,15 +39,24 @@ const styles = {
 };
 
 function BottonComponent({ props: { group, setGroup, deltaY, setDeltaY } }) {
-  const [visibleSlide, setVisibleSlide] = useState(0);
-
   //reference to the element to where the view jumps after event
   const scrollToZero = useRef();
   const scrollToOne = useRef();
   const scrollToTwo = useRef();
   const scrollToThree = useRef();
   const scrollToFour = useRef();
+  const refContainer = useRef();
 
+  const [visibleSlide, setVisibleSlide] = useState(0);
+  const [rearrangePos, setRearrangePos] = useState(false);
+
+  const slideRefs = [
+    scrollToZero,
+    scrollToOne,
+    scrollToTwo,
+    scrollToThree,
+    scrollToFour,
+  ];
   //read out with onWheel if the user scrolls up or down. then declare which page/element/slide is visibile
   useEffect(() => {
     if (deltaY < 0 && visibleSlide !== 0) setVisibleSlide(visibleSlide - 1);
@@ -62,6 +65,13 @@ function BottonComponent({ props: { group, setGroup, deltaY, setDeltaY } }) {
     else if (deltaY === 0) return;
     setDeltaY(0);
     console.log({ deltaY, visibleSlide });
+    console.log(
+      { refContainer: refContainer?.current.getBoundingClientRect().top },
+      { scrollToZero: scrollToZero?.current.getBoundingClientRect().top }
+    );
+    console.log({ scrollTop: refContainer?.current.scrollTop });
+
+    // console.log(window.innerHeight, window.innerWidth);
   }, [deltaY]);
 
   //after updating the visibleSlide turn the number value (=== element index) to the ref name and scroll to the loaction with scrollIntoView
@@ -85,7 +95,14 @@ function BottonComponent({ props: { group, setGroup, deltaY, setDeltaY } }) {
       default:
         break;
     }
+    setTimeout(() => checkAgain(), 500);
   }, [visibleSlide]);
+
+  function checkAgain() {
+    console.log("triggered");
+
+    slideRefs[visibleSlide].current.scrollIntoView();
+  }
 
   return (
     <div style={styles.BottomComponent}>
@@ -106,7 +123,8 @@ function BottonComponent({ props: { group, setGroup, deltaY, setDeltaY } }) {
           Bottom
         </button>
       </div>
-      <div style={styles.scrollDiv}>
+
+      <div style={styles.scrollDiv} ref={refContainer}>
         <Img0 childRef={scrollToZero} />
         <Img1 childRef={scrollToOne} />
         <Img2 childRef={scrollToTwo} />

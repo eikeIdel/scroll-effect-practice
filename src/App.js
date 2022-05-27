@@ -9,10 +9,10 @@ function App() {
   const [activeScroll, setActiveScroll] = useState(false);
 
   function handleOnWheel(event) {
-    console.log("App.js", event.deltaY);
+    // console.log("App.js", event.deltaY);
     !activeScroll && setDeltaY(event.deltaY);
     setActiveScroll(true);
-    setTimeout(() => setActiveScroll(false), 500);
+    setTimeout(() => setActiveScroll(false), 1000);
   }
 
   return (
